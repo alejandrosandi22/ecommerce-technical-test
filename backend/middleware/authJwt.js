@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   let token = req.headers['authorization'];
 
-  if (!token) {
-    token = req.headers['x-access-token'];
+  if (!token && req.cookies.token) {
+    token = req.cookies.token;
   }
 
   if (token && token.startsWith('Bearer ')) {
@@ -25,7 +25,7 @@ verifyToken = (req, res, next) => {
   });
 };
 
-isAdmin = (req, res, next) => {
+const isAdmin = (req, res, next) => {
   if (req.userRole === 'admin') {
     return next();
   }
