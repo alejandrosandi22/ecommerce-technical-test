@@ -19,22 +19,35 @@ exports.signin = async (req, res) => {
   if (!user) return res.status(404).send({ message: 'User Not Found' });
 
   const isValid = bcrypt.compareSync(req.body.password, user.password);
-  if (!isValid)
-    return res
-      .status(401)
-      .send({ accessToken: null, message: 'Invalid Password!' });
+  if (!isValid) return res.status(401).send({ message: 'Invalid Password!' });
 
   const token = jwt.sign(
     { id: user.id, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: 86400 }
+    { expiresIn: '1d' },
   );
 
-  res.status(200).send({
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 86400000, // 1 day
+  });
+
+  return res.status(200).send({
     id: user.id,
     username: user.username,
     email: user.email,
     role: user.role,
-    accessToken: token,
   });
+};
+
+exports.logout = (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  });
+
+  res.status(200).send({ message: 'Logged out successfully' });
 };
