@@ -7,7 +7,11 @@ module.exports = (app) => {
     const db = require('../models');
     const user = await db.user.findByPk(req.userId);
 
-    res.json({ username: user.username, email: user.email });
+    res.json({
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    });
   });
 
   app.use('/api/user', router);
