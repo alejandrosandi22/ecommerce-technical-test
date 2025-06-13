@@ -7,10 +7,10 @@ export const getCart = async () => {
   });
 };
 
-export const addToCart = async (productId: number) => {
+export const addToCart = async (productId: number, quantity = 1) => {
   return await apiClient('/cart', {
     method: 'POST',
-    body: JSON.stringify({ productId, quantity: 1 }),
+    body: JSON.stringify({ productId, quantity }),
   });
 };
 
@@ -23,5 +23,15 @@ export const removeFromCart = async (productId: number) => {
 export const clearCartOnServer = async () => {
   return await apiClient('/cart', {
     method: 'DELETE',
+  });
+};
+
+export const updateCartQuantity = async (
+  productId: number,
+  quantity: number,
+) => {
+  return await apiClient(`/cart/${productId}`, {
+    method: 'PUT',
+    body: JSON.stringify({ quantity }),
   });
 };

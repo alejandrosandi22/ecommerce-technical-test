@@ -1,7 +1,9 @@
 import {
+  addToCart as addToCartRequest,
   clearCartOnServer,
   getCart,
-  removeFromCart as removeFromCartApi,
+  removeFromCart,
+  updateCartQuantity,
 } from '@/services/cartService';
 import { getProductById } from '@/services/productService';
 import type { CartItem } from '@/types/cart';
@@ -23,44 +25,46 @@ interface CartState {
 
 export const useCartStore = create<CartState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       items: [],
       totalItems: 0,
       totalPrice: 0,
 
-      addToCart: (item) =>
-        set((state) => {
-          const existing = state.items.find(
-            (i) => i.productId === item.productId,
+      addToCart: async (item) => {
+        const state = get();
+        const existing = state.items.find(
+          (i) => i.productId === item.productId,
+        );
+
+        let updatedItems: CartItem[];
+
+        if (existing) {
+          const newQuantity = existing.quantity + item.quantity;
+
+          await updateCartQuantity(item.productId, newQuantity);
+
+          updatedItems = state.items.map((i) =>
+            i.productId === item.productId
+              ? { ...i, quantity: newQuantity }
+              : i,
           );
+        } else {
+          await addToCartRequest(item.productId);
 
-          let updatedItems: CartItem[];
+          updatedItems = [...state.items, item];
+        }
 
-          if (existing) {
-            updatedItems = state.items.map((i) =>
-              i.productId === item.productId
-                ? { ...i, quantity: i.quantity + item.quantity }
-                : i,
-            );
-          } else {
-            updatedItems = [...state.items, item];
-          }
+        const totalItems = updatedItems.reduce((sum, i) => sum + i.quantity, 0);
+        const totalPrice = updatedItems.reduce(
+          (sum, i) => sum + i.price * i.quantity,
+          0,
+        );
 
-          const totalItems = updatedItems.reduce(
-            (sum, i) => sum + i.quantity,
-            0,
-          );
-
-          const totalPrice = updatedItems.reduce(
-            (sum, i) => sum + i.price * i.quantity,
-            0,
-          );
-
-          return { items: updatedItems, totalItems, totalPrice };
-        }),
+        set({ items: updatedItems, totalItems, totalPrice });
+      },
 
       removeFromCart: async (productId) => {
-        await removeFromCartApi(productId);
+        await removeFromCart(productId);
         set((state) => {
           const items = state.items.filter(
             (item) => item.productId !== productId,
@@ -74,43 +78,55 @@ export const useCartStore = create<CartState>()(
         });
       },
 
-      incrementQuantity: (productId) =>
-        set((state) => {
-          const items = state.items.map((item) =>
-            item.productId === productId
-              ? { ...item, quantity: item.quantity + 1 }
-              : item,
+      incrementQuantity: async (productId) => {
+        const state = get();
+        const item = state.items.find((i) => i.productId === productId);
+        if (!item) return;
+
+        const newQuantity = item.quantity + 1;
+        await updateCartQuantity(productId, newQuantity);
+
+        set(() => {
+          const items = state.items.map((i) =>
+            i.productId === productId ? { ...i, quantity: newQuantity } : i,
           );
-
           const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
-
           const totalPrice = items.reduce(
             (sum, i) => sum + i.price * i.quantity,
             0,
           );
-
           return { items, totalItems, totalPrice };
-        }),
+        });
+      },
 
-      decrementQuantity: (productId) =>
-        set((state) => {
+      decrementQuantity: async (productId) => {
+        const state = get();
+        const item = state.items.find((i) => i.productId === productId);
+        if (!item) return;
+
+        const newQuantity = item.quantity - 1;
+
+        if (newQuantity <= 0) {
+          await removeFromCart(productId);
+        } else {
+          await updateCartQuantity(productId, newQuantity);
+        }
+
+        set(() => {
           const items = state.items
-            .map((item) =>
-              item.productId === productId && item.quantity > 1
-                ? { ...item, quantity: item.quantity - 1 }
-                : item,
+            .map((i) =>
+              i.productId === productId ? { ...i, quantity: newQuantity } : i,
             )
-            .filter((item) => item.quantity > 0);
+            .filter((i) => i.quantity > 0);
 
           const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
-
           const totalPrice = items.reduce(
             (sum, i) => sum + i.price * i.quantity,
             0,
           );
-
           return { items, totalItems, totalPrice };
-        }),
+        });
+      },
 
       clearCart: async () => {
         set({
@@ -128,6 +144,7 @@ export const useCartStore = create<CartState>()(
           totalPrice: 0,
         });
       },
+
       loadCartFromServer: async () => {
         const cartItems = await getCart();
 
