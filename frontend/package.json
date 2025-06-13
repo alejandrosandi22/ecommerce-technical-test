@@ -12,9 +12,29 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-navigation-menu": "^1.2.13",
+    "@radix-ui/react-select": "^2.2.5",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@tanstack/react-table": "^8.21.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "firebase": "^11.9.1",
+    "i": "^0.3.7",
+    "lucide-react": "^0.514.0",
     "next": "15.3.3",
+    "next-themes": "^0.4.6",
+    "npm": "^11.4.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.57.0",
+    "sonner": "^2.0.5",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^3.25.63",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
@@ -30,6 +50,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.12",
     "tailwindcss": "^4",
+    "tw-animate-css": "^1.3.4",
     "typescript": "^5"
   }
 }
