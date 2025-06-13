@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend - Next.js E-commerce App
 
-## Getting Started
+This is the frontend application for the E-commerce project, built with **Next.js** and **React**. It provides a responsive user interface that interacts with the backend API to display products, manage user authentication, and handle shopping cart operations.
 
-First, run the development server:
+---
+
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Technologies](#technologies)
+- [Environment Setup](#environment-setup)
+- [Project Structure](#project-structure)
+- [Available Scripts](#available-scripts)
+- [Configuration](#configuration)
+- [Dependencies](#dependencies)
+- [Development Workflow](#development-workflow)
+- [License](#license)
+
+---
+
+## Project Overview
+
+The frontend is developed using Next.js with React 19. It leverages modern React hooks, form handling with `react-hook-form`, and state management using `zustand`. UI components are enhanced by Radix UI and TailwindCSS for styling and responsiveness. The frontend communicates with a backend REST API for data persistence and user management.
+
+---
+
+## Technologies
+
+- **Next.js** (v15.3.3) — React framework for server-side rendering and static site generation
+- **React** (v19.0.0) — UI library
+- **TailwindCSS** (v4) — Utility-first CSS framework for styling
+- **React Hook Form** — For building performant, accessible forms
+- **Zod** — Schema validation for form inputs
+- **Zustand** — Lightweight state management
+- **Radix UI** — Accessible unstyled components
+- **Firebase** — For media storage
+
+---
+
+## Environment Setup
+
+Create a `.env` file in the root of the frontend folder with the following variable:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> Replace `http://localhost:5000/api` with your backend API URL if different.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+frontend/
+├── components/           # Reusable React components
+├── hooks/                # Custom React hooks
+├── pages/                # Next.js pages and API routes
+├── public/               # Static assets like images and fonts
+├── styles/               # TailwindCSS configuration and global styles
+├── utils/                # Utility functions and helpers
+├── .env                  # Environment variables
+├── package.json          # Project metadata and scripts
+└── tsconfig.json         # TypeScript configuration
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Available Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Run these commands from the root of the frontend directory:
 
-## Deploy on Vercel
+- `npm run dev`
+  Starts the development server at [http://localhost:3000](http://localhost:3000) with hot reloading.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `npm run build`
+  Creates an optimized production build.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run start`
+  Runs the Next.js production server.
+
+- `npm run lint`
+  Runs ESLint for code quality checks.
+
+- `npm run format`
+  Formats code using Prettier.
+
+- `npm run format:check`
+  Checks code formatting without applying changes.
+
+---
+
+## Configuration
+
+- **API Base URL**: Configured via `.env` in `NEXT_PUBLIC_API_URL`, used throughout the app to connect with the backend REST API.
+
+- **Husky & Commitlint**: Pre-commit hooks are set up for consistent commit message styles based on Conventional Commits.
+
+---
+
+## Dependencies
+
+Key dependencies include:
+
+- `next`, `react`, `react-dom` — Core framework and React libraries
+- `tailwindcss`, `prettier-plugin-tailwindcss` — Styling and formatting
+- `react-hook-form`, `zod` — Form management and validation
+- `zustand` — State management
+- `@radix-ui/react-*` — Accessible UI primitives
+- `firebase` — Optional for media/storage needs
+
+---
+
+## Development Workflow
+
+1. Clone the repository and navigate to the `frontend` folder.
+2. Install dependencies: `npm install`
+3. Create and configure the `.env` file.
+4. Run the development server: `npm run dev`
+5. Develop UI components inside `components/` and pages inside `pages/`.
+6. Use `npm run lint` and `npm run format` to maintain code quality.
+
+---
+
+## License
+
+This project is open-source and free to use under the ISC License.
