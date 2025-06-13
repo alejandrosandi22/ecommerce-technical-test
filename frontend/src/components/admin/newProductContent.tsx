@@ -15,6 +15,11 @@ export default function NewProductContent() {
   const handleCreate = async (values: ProductFormValues) => {
     const loadingId = showToast.loading('Creating product...');
 
+    if (values.image && values.image.length > 255) {
+      showToast.error('La URL de la imagen no puede exceder 255 caracteres.');
+      return;
+    }
+
     try {
       const productData: CreateProductInput = {
         name: values.name,
