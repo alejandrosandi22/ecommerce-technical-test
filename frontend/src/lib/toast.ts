@@ -3,16 +3,19 @@ import { toast } from 'sonner';
 export const showToast = {
   success: (message: string) => {
     toast.success('Éxito', {
+      descriptionClassName: 'text-foreground',
       description: message,
     });
   },
   error: (message: string) => {
     toast.error('Error', {
+      descriptionClassName: 'text-foreground',
       description: message,
     });
   },
   info: (message: string) => {
     toast.info('Información', {
+      descriptionClassName: 'text-foreground',
       description: message,
     });
   },

@@ -32,7 +32,13 @@ export default function RootLayout({
       >
         <MainNav />
         <main className='mt-14'>{children}</main>
-        <Toaster />
+        <Toaster
+          theme='light'
+          toastOptions={{
+            className: 'text-foreground',
+            descriptionClassName: 'text-foreground',
+          }}
+        />
       </body>
     </html>
   );
