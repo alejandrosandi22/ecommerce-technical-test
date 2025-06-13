@@ -5,6 +5,7 @@ module.exports = (app) => {
   const router = require('express').Router();
 
   router.get('/', controller.findAll);
+  router.get('/:id', controller.findById);
   router.post('/', [verifyToken, isAdmin], controller.create);
   router.put('/:id', [verifyToken, isAdmin], controller.update);
   router.delete('/:id', [verifyToken, isAdmin], controller.delete);
